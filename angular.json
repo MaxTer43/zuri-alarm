@@ -65,7 +65,7 @@
           },
           "defaultConfiguration": "development",
           "options": {
-            "proxyConfig": "src/proxy.conf.json"
+            "proxyConfig": "vercel.json"
           }
         },
         "extract-i18n": {

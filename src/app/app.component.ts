@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { environment } from '../environments/environment.prod';
+// @ts-ignore
 import axios from 'axios';
 
 @Component({
