@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { environment } from '../environments/environment.prod';
+import axios from 'axios';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,7 @@ export class AppComponent {
   private readonly defaultImage: string = 'assets/alarm_image.png';
   private readonly activeImage: string = 'assets/alarm_image2.png';
 
-  toggleImage() {
+  async toggleImage() {
     if (this.alarmImage == this.activeImage) return;
     this.alarmImage = this.activeImage;
     const report = {
@@ -26,18 +27,17 @@ export class AppComponent {
       Image: "Imagen"
     };
 
-    console.log(environment.API_KEY);
-    // Realiza la solicitud POST
-    fetch(environment.API_KEY, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(report),
-    })
-      .then(response => response.json())
-      .then(data => console.log('Success:', data))
-      .catch((error) => console.error('Error:', error));
+    const apiUrl = environment.apiUrl;
+    try {
+      const response = await axios.post(apiUrl, report, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
 
     setTimeout(() => {
       this.alarmImage = this.defaultImage;

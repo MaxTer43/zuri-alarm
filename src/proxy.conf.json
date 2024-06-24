@@ -1,0 +1,7 @@
+{
+  "/api": {
+    "target": "https://monitoring-backend-production-8dd2.up.railway.app",
+    "secure": false,
+    "changeOrigin": true
+  }
+}
