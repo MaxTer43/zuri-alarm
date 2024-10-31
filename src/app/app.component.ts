@@ -26,12 +26,6 @@ export class AppComponent {
       const cameraResponse = await axios.get(unsplashAPI + "/camera");
       const data = cameraResponse.status === 200 ? cameraResponse.data : {};
 
-      const urls = Array.isArray(data.result)
-        ? data.result
-          .filter((camera: { unitId: number }) => camera.unitId === unitId) // Filtrar donde unitId es 7
-          .map((camera: { url: string }) => camera.url) // Obtener solo el atributo url
-        : [];
-
       const tracking_links = Array.isArray(data.result)
         ? data.result
           .filter((camera: { unitId: number }) => camera.unitId === unitId)
@@ -43,15 +37,11 @@ export class AppComponent {
           links += " " + tracking_links[i];
         }
       }
-      console.log("Img data")
-      const imgData = await this.getImageFromStream(urls[0]);
-      console.log("Report")
       const report = {
         "address": "Dentro del bus",
         "incident": "",
-        "tracking_link": tracking_links,
+        "tracking_link": links.toString(),
         "unitId": environment.UNIT_ID,
-        "image": imgData
       };
       const formData = new FormData();
       formData.append('data', JSON.stringify(report)); // Agregar los datos del reporte
@@ -69,11 +59,5 @@ export class AppComponent {
     setTimeout(() => {
       this.alarmImage = this.defaultImage;
     }, 5 * 60 * 1000); // 5 minutos
-  }
-  // Método para obtener la imagen desde un stream
-  async getImageFromStream(streamUrl: string): Promise<File> {
-    const response = await fetch(streamUrl);
-    const blob = await response.blob(); // Convertir la respuesta en un Blob
-    return new File([blob], 'image.jpg', { type: 'image/jpeg' });
   }
 }
