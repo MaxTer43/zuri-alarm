@@ -21,7 +21,7 @@ export class AppComponent {
     if (this.alarmImage == this.activeImage) return;
     this.alarmImage = this.activeImage;
     const unsplashAPI= environment.UNSPLASH_API_KEY;
-    const unitId= parseInt(environment.UNIT_ID);
+    const unitId= parseInt(String(environment.UNIT_ID));
     try {
       const cameraResponse = await axios.get(unsplashAPI + "/camera");
       const data = cameraResponse.status === 200 ? cameraResponse.data : {};

@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: "https://monitoring-backend-production-8dd2.up.railway.app/api/reports"
+  UNSPLASH_API_KEY: "https://zuricam-api-service.azurewebsites.net",
+  UNIT_ID: 7
 };
