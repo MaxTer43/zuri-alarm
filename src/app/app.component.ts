@@ -37,16 +37,13 @@ export class AppComponent {
           links += " " + tracking_links[i];
         }
       }
-      const report = {
-        "address": "Dentro del bus",
-        "incident": "",
-        "tracking_link": links.toString(),
-        "unitId": environment.UNIT_ID,
-      };
-      const formData = new FormData();
-      formData.append('data', JSON.stringify(report)); // Agregar los datos del reporte
 
-      const response = await axios.post(unsplashAPI + "/report", report, {
+      const response = await axios.post(unsplashAPI + "/report", {
+        address: "DENTRO DEL BUS",
+        incident: "",
+        tracking_link: links.toString(),
+        unitId: environment.UNIT_ID
+      }, {
         headers: {
           'Content-Type': 'application/json'
         }
