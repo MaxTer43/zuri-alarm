@@ -16,12 +16,12 @@ export class AppComponent {
   private readonly defaultImage: string = 'assets/alarm_image.png';
   private readonly activeImage: string = 'assets/alarm_image2.png';
 
-
   async toggleImage() {
     if (this.alarmImage == this.activeImage) return;
     this.alarmImage = this.activeImage;
-    const unsplashAPI= environment.UNSPLASH_API_KEY;
-    const unitId= parseInt(String(environment.UNIT_ID));
+    const unsplashAPI = environment.UNSPLASH_API_KEY;
+    const unitId = parseInt(String(environment.UNIT_ID));
+
     try {
       const cameraResponse = await axios.get(unsplashAPI + "/camera");
       const data = cameraResponse.status === 200 ? cameraResponse.data : {};
@@ -29,26 +29,21 @@ export class AppComponent {
       const tracking_links = Array.isArray(data.result)
         ? data.result
           .filter((camera: { unitId: number }) => camera.unitId === unitId)
-          .map((camera: { location: string }) => camera.location) // Obtener solo el atributo location
+          .map((camera: { location: string }) => camera.location)
         : [];
-      let links = tracking_links[0]
-      if (tracking_links.length > 1){
-        for (let i = 1; i < tracking_links.length; i++) {
-          links += " " + tracking_links[i];
-        }
-      }
+      let links = tracking_links.join(" "); // Concatena todos los enlaces
 
-      const response = await axios.post(unsplashAPI + "/report", {
-        address: "DENTRO DEL BUS",
-        incident: "",
-        tracking_link: links.toString(),
-        unitId: environment.UNIT_ID
-      }, {
+      const formData = new FormData();
+      formData.append("address", "DENTRO DEL BUS");
+      formData.append("incident", "");
+      formData.append("tracking_link", links.toString());
+      formData.append("unit_id", String(environment.UNIT_ID));
+
+      const response = await axios.post(unsplashAPI + "/report/upload/", formData, {
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'multipart/form-data',
+        },
       });
-      console.log(response);
     } catch (error) {
       console.error(error);
     }
